@@ -1,4 +1,4 @@
-package com.example.expprototype.viewpager
+package com.example.expprototype.viewpager.activity
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.expprototype.databinding.ActivityViewPagerBinding
+import com.example.expprototype.viewpager.fragment.CategoryFragment
+import com.example.expprototype.viewpager.util.ViewPagerAdapter
 import java.lang.Math.abs
 
 

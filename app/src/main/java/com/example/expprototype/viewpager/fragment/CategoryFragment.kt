@@ -1,4 +1,4 @@
-package com.example.expprototype.viewpager
+package com.example.expprototype.viewpager.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.expprototype.databinding.FragmentCategoryBinding
+import com.example.expprototype.viewpager.util.DragListener
+import com.example.expprototype.viewpager.util.ViewPagerAdapter
+import com.example.expprototype.viewpager.activity.ViewPagerActivity
 
 private const val ARG_PARAM1 = "category"
 private const val ARG_PARAM2 = "feature"

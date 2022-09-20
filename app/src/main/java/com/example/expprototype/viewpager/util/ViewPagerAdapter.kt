@@ -1,4 +1,4 @@
-package com.example.expprototype.viewpager
+package com.example.expprototype.viewpager.util
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment

@@ -1,4 +1,4 @@
-package com.example.expprototype.viewpager
+package com.example.expprototype.viewpager.util
 
 interface DragListener {
 

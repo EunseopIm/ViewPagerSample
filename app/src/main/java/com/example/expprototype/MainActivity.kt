@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.expprototype.databinding.ActivityMainBinding
 import com.example.expprototype.file.FileActivity
 import com.example.expprototype.gallery.GalleryViewActivity
-import com.example.expprototype.viewpager.ViewPagerActivity
+import com.example.expprototype.viewpager.activity.ViewPagerActivity
 
 
 class MainActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.example.expprototype.viewpager
+package com.example.expprototype.viewpager.fragment
 
 import android.graphics.Color
 import android.os.Bundle
