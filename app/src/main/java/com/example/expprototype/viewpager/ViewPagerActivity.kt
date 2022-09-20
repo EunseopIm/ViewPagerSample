@@ -73,12 +73,10 @@ class ViewPagerActivity : AppCompatActivity() {
     private fun initViewPager() {
 
         // 뷰페이저 초기화
-        fragments.add(CategoryFragment.newInstance("category1", "feature1", 0))
-        fragments.add(CategoryFragment.newInstance("category1", "feature2", 1))
-        fragments.add(CategoryFragment.newInstance("category2", "feature3", 2))
-        fragments.add(CategoryFragment.newInstance("category2", "feature4", 3))
-        fragments.add(CategoryFragment.newInstance("category3", "feature5", 4))
-        fragments.add(CategoryFragment.newInstance("category4", "feature6", 5))
+        fragments.add(CategoryFragment.newInstance("", "", 0))
+        fragments.add(CategoryFragment.newInstance("", "", 1))
+        fragments.add(CategoryFragment.newInstance("", "", 2))
+        fragments.add(CategoryFragment.newInstance("", "", 3))
 
         pagerAdapter = ViewPagerAdapter(this, fragments)
         with(binding) {
@@ -92,11 +90,10 @@ class ViewPagerActivity : AppCompatActivity() {
                 }
             })
             viewPager.offscreenPageLimit = fragments.size
-            //viewPager.setPageTransformer(pageTransformer)
+            viewPager.requestDisallowInterceptTouchEvent(false)
+            viewPager.isUserInputEnabled = false
+            viewPager.setPageTransformer(pageTransformer)
         }
-
-        //binding.viewPager.currentItem = fragments.size-1
-        //animateViewPager(binding.viewPager, 10, 3000)
     }
 
     private var animFactor = 0
