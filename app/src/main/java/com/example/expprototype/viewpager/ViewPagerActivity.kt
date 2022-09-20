@@ -25,11 +25,12 @@ class ViewPagerActivity : AppCompatActivity() {
     private fun initViewPager() {
 
         // 뷰페이저 초기화
-        val fragment1 = CategoryFragment.newInstance("", "")
-        val fragment2 = CategoryFragment.newInstance("", "")
-
-        fragments.add(fragment1)
-        fragments.add(fragment2)
+        fragments.add(CategoryFragment.newInstance("category1", "feature1", 0))
+        fragments.add(CategoryFragment.newInstance("category1", "feature2", 1))
+        fragments.add(CategoryFragment.newInstance("category2", "feature3", 2))
+        fragments.add(CategoryFragment.newInstance("category2", "feature4", 3))
+        fragments.add(CategoryFragment.newInstance("category3", "feature5", 4))
+        fragments.add(CategoryFragment.newInstance("category4", "feature6", 5))
 
         pagerAdapter = ViewPagerAdapter(this, fragments)
         with(binding) {
