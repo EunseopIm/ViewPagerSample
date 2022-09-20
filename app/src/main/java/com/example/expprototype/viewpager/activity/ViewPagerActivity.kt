@@ -49,7 +49,7 @@ class ViewPagerActivity : AppCompatActivity() {
                 }
             })
             viewPager.offscreenPageLimit = fragments.size
-            viewPager.isUserInputEnabled = true
+            viewPager.isUserInputEnabled = false
             viewPager.setPageTransformer(CubeOutTransformer())
         }
     }

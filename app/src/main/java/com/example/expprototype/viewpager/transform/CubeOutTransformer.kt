@@ -19,7 +19,7 @@ package com.example.expprototype.viewpager.transform
 import android.view.View
 
 open class CubeOutTransformer @JvmOverloads constructor(
-        private val distanceMultiplier: Int = 20
+        private val distanceMultiplier: Int = 10
 ) : ABaseTransformer() {
 
     public override val isPagingEnabled: Boolean
