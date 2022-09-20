@@ -3,23 +3,17 @@ package com.example.expprototype
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.expprototype.databinding.ActivityMainBinding
+import com.example.expprototype.databinding.ActivityViewPagerBinding
 
-class MainActivity : AppCompatActivity() {
+class ViewPagerActivity : AppCompatActivity() {
 
-    private val binding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
+    private val binding: ActivityViewPagerBinding by lazy {
+        ActivityViewPagerBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.btnGallery.setOnClickListener {
-
-        }
-
-        binding.btnViewPager.setOnClickListener {
-
-        }
     }
 }

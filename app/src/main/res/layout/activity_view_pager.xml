@@ -7,16 +7,9 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btnViewPager"
+    <TextView
+        android:text="ViewPager"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="view_pager" />
-
-    <Button
-        android:id="@+id/btnGallery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="gallery_view" />
+        android:layout_height="wrap_content"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>
