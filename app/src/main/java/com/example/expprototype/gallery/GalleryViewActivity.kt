@@ -1,4 +1,4 @@
-package com.example.expprototype
+package com.example.expprototype.gallery
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
