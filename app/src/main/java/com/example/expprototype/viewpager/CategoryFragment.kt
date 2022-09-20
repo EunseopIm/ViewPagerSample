@@ -1,7 +1,10 @@
 package com.example.expprototype.viewpager
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -52,6 +55,7 @@ class CategoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        Log.v(">>>", "@# initView")
         initView()
 
         return binding.root
@@ -62,6 +66,15 @@ class CategoryFragment : Fragment() {
         initViewPager()
     }
 
+    private var oldX = 0f
+    private var posX = 0f
+    private var diffPosX = 0f
+    var dragListener: DragListener? = null
+
+    var isLastPosition = false
+    var isFirstPosition = false
+
+    @SuppressLint("ClickableViewAccessibility")
     private fun initViewPager() {
 
         if (activity == null) return
@@ -91,10 +104,63 @@ class CategoryFragment : Fragment() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
 
+                    Log.v(">>>", "@# onPageSelected - position:${position}")
+
+                    isFirstPosition = position == 0
+                    isLastPosition = position + 1 == fragments.size
                 }
             })
             viewPager.offscreenPageLimit = fragments.size
-            viewPager.requestDisallowInterceptTouchEvent(true)
+            dragListener = object : DragListener {
+
+                override fun onLeft() {
+
+                    activity?.let {
+                        if (it is ViewPagerActivity) {
+                            it.nextPage()
+                        }
+                    }
+                }
+
+                override fun onRight() {
+
+                    activity?.let {
+                        if (it is ViewPagerActivity) {
+                            it.prevPage()
+                        }
+                    }
+                }
+            }
+            viewPager.getChildAt(0).setOnTouchListener { view, event ->
+
+                when (event.action) {
+
+                    MotionEvent.ACTION_DOWN -> oldX = event.rawX
+
+                    MotionEvent.ACTION_MOVE -> {
+
+                        posX = event.rawX
+                        diffPosX = posX - oldX
+                        //return@setOnTouchListener true
+                    }
+
+                    MotionEvent.ACTION_UP ->
+                        // Right (Hide)
+                        if (diffPosX > 0) {
+                            if (isFirstPosition) {
+                                dragListener?.onRight()
+                                return@setOnTouchListener true
+                            }
+                        } else {
+                            if (isLastPosition) {
+                                dragListener?.onLeft()
+                                return@setOnTouchListener true
+                            }
+                        }
+                }
+
+                return@setOnTouchListener false
+            }
         }
     }
 }

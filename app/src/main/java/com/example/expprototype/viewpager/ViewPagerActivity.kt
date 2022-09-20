@@ -90,9 +90,27 @@ class ViewPagerActivity : AppCompatActivity() {
                 }
             })
             viewPager.offscreenPageLimit = fragments.size
-            viewPager.requestDisallowInterceptTouchEvent(false)
+            //viewPager.requestDisallowInterceptTouchEvent(false)
             viewPager.isUserInputEnabled = false
             viewPager.setPageTransformer(pageTransformer)
+        }
+    }
+
+    fun prevPage() {
+
+        val position = binding.viewPager.currentItem
+        val size = fragments.size
+        if (position > 0) {
+            binding.viewPager.setCurrentItem(position - 1, true)
+        }
+    }
+
+    fun nextPage() {
+
+        val position = binding.viewPager.currentItem
+        val size = fragments.size
+        if (position < size - 1) {
+            binding.viewPager.setCurrentItem(position + 1, true)
         }
     }
 
