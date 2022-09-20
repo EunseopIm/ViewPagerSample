@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.os.Bundle
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -11,6 +12,7 @@ import com.example.expprototype.databinding.ActivityViewPagerBinding
 import com.example.expprototype.viewpager.fragment.CategoryFragment
 import com.example.expprototype.viewpager.transform.CubeOutTransformer
 import com.example.expprototype.viewpager.util.ViewPagerAdapter
+import com.example.expprototype.viewpager.util.setCurrentItemExtension
 
 
 class ViewPagerActivity : AppCompatActivity() {
@@ -54,12 +56,18 @@ class ViewPagerActivity : AppCompatActivity() {
         }
     }
 
+    private val transformDuration :Long = 300L
     fun prevPage() {
 
         val position = binding.viewPager.currentItem
-        val size = fragments.size
         if (position > 0) {
-            binding.viewPager.setCurrentItem(position - 1, true)
+            binding.viewPager.setCurrentItemExtension(
+                position - 1,
+                transformDuration,
+                AccelerateDecelerateInterpolator(),
+                binding.viewPager.width,
+                binding.viewPager.height)
+            //binding.viewPager.setCurrentItem(position - 1, true)
         }
     }
 
@@ -68,7 +76,13 @@ class ViewPagerActivity : AppCompatActivity() {
         val position = binding.viewPager.currentItem
         val size = fragments.size
         if (position < size - 1) {
-            binding.viewPager.setCurrentItem(position + 1, true)
+            binding.viewPager.setCurrentItemExtension(
+                position + 1,
+                transformDuration,
+                AccelerateDecelerateInterpolator(),
+                binding.viewPager.width,
+                binding.viewPager.height)
+            //binding.viewPager.setCurrentItem(position + 1, true)
         }
     }
 
