@@ -25,4 +25,10 @@
         android:layout_height="wrap_content"
         android:text="file_view" />
 
+    <Button
+        android:id="@+id/btnService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="service" />
+
 </androidx.appcompat.widget.LinearLayoutCompat>

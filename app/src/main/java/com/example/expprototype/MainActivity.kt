@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.expprototype.databinding.ActivityMainBinding
 import com.example.expprototype.file.FileActivity
 import com.example.expprototype.gallery.GalleryViewActivity
+import com.example.expprototype.service.ServiceActivity
 import com.example.expprototype.viewpager.activity.ViewPagerActivity
 
 
@@ -20,8 +21,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initView()
-
-
     }
 
     private fun initView() {
@@ -43,6 +42,13 @@ class MainActivity : AppCompatActivity() {
         binding.btnFile.setOnClickListener {
 
             Intent(this, FileActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
+
+        binding.btnService.setOnClickListener {
+
+            Intent(this, ServiceActivity::class.java).apply {
                 startActivity(this)
             }
         }
