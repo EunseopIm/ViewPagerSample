@@ -57,11 +57,12 @@ class FeatureFragment : Fragment() {
     private fun initView() {
 
         // background color
-        if (param3 % 2 == 1) {
+        binding.clRoot.setBackgroundColor(Color.parseColor("#ff0000"))
+        /*if (param3 % 2 == 1) {
             binding.clRoot.setBackgroundColor(Color.parseColor("#ff0000"))
         } else {
             binding.clRoot.setBackgroundColor(Color.parseColor("#0000ff"))
-        }
+        }*/
 
         // category title
         binding.tvCategory.text = param1?: ""

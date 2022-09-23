@@ -1,6 +1,7 @@
 package com.example.expprototype.viewpager.fragment
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,9 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.expprototype.databinding.FragmentCategoryBinding
+import com.example.expprototype.viewpager.activity.ViewPagerActivity
 import com.example.expprototype.viewpager.util.DragListener
 import com.example.expprototype.viewpager.util.ViewPagerAdapter
-import com.example.expprototype.viewpager.activity.ViewPagerActivity
 
 private const val ARG_PARAM1 = "category"
 private const val ARG_PARAM2 = "feature"
@@ -83,10 +84,11 @@ class CategoryFragment : Fragment() {
         if (activity == null) return
 
         if (param3 == 0) {
-            fragments.add(FeatureFragment.newInstance("category1", "feature1", 0))
-            fragments.add(FeatureFragment.newInstance("category1", "feature2", 1))
-            fragments.add(FeatureFragment.newInstance("category1", "feature3", 2))
-            fragments.add(FeatureFragment.newInstance("category1", "feature4", 3))
+
+            for (i in 0..20) {
+                fragments.add(FeatureFragment.newInstance("category1", "feature${i+1}", i))
+            }
+
         } else if (param3 == 1) {
             fragments.add(FeatureFragment.newInstance("category2", "feature5", 4))
             fragments.add(FeatureFragment.newInstance("category2", "feature6", 5))
@@ -114,6 +116,12 @@ class CategoryFragment : Fragment() {
                 }
             })
             viewPager.offscreenPageLimit = fragments.size
+
+            indicator.visibleDotCount = 11
+            indicator.dotColor = Color.parseColor("#99eeeeee")
+            indicator.selectedDotColor = Color.parseColor("#ffffff")
+            indicator.attachToPager(viewPager)
+
             dragListener = object : DragListener {
 
                 override fun onLeft() {
