@@ -3,7 +3,6 @@ package com.example.expprototype.viewpager.fragment
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -17,59 +16,19 @@ import com.example.expprototype.viewpager.util.DragListener
 import com.example.expprototype.viewpager.util.ViewPagerAdapter
 
 private const val ARG_PARAM1 = "category"
-private const val ARG_PARAM2 = "feature"
-private const val ARG_PARAM3 = "count"
+private const val ARG_PARAM2 = "color"
 
 class CategoryFragment : Fragment() {
+
+    private var paramCategory: Int = 0          // 카테고리
+    private var paramColorCode: String? = null  // 컬러코드
 
     private val fragments: ArrayList<Fragment> = ArrayList()
     private var pagerAdapter: ViewPagerAdapter? = null
 
-    private val binding: FragmentCategoryBinding by lazy {
-        FragmentCategoryBinding.inflate(layoutInflater)
-    }
-
-    companion object {
-
-        fun newInstance(param1: String, param2: String, param3: Int) =
-            CategoryFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                    putInt(ARG_PARAM3, param3)
-                }
-            }
-    }
-
-    private var param1: String? = null
-    private var param2: String? = null
-    private var param3: Int = 0
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-            param3 = it.getInt(ARG_PARAM3)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        Log.v(">>>", "@# initView")
-        initView()
-
-        return binding.root
-    }
-
-    private fun initView() {
-
-        initViewPager()
-    }
-
+    /**
+     * DragListener
+     */
     private var oldX = 0f
     private var posX = 0f
     private var diffPosX = 0f
@@ -78,26 +37,48 @@ class CategoryFragment : Fragment() {
     var isLastPosition = false
     var isFirstPosition = false
 
+    private val binding: FragmentCategoryBinding by lazy {
+        FragmentCategoryBinding.inflate(layoutInflater)
+    }
+
+    companion object {
+
+        fun newInstance(param1: Int, param2: String) =
+            CategoryFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            paramCategory = it.getInt(ARG_PARAM1)
+            paramColorCode = it.getString(ARG_PARAM2)
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+
+        initViewPager()
+
+        return binding.root
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun initViewPager() {
 
         if (activity == null) return
 
-        if (param3 == 0) {
-
-            for (i in 0..20) {
-                fragments.add(FeatureFragment.newInstance("category1", "feature${i+1}", i))
-            }
-
-        } else if (param3 == 1) {
-            fragments.add(FeatureFragment.newInstance("category2", "feature5", 4))
-            fragments.add(FeatureFragment.newInstance("category2", "feature6", 5))
-        } else if (param3 == 2) {
-            fragments.add(FeatureFragment.newInstance("category3", "feature7", 6))
-        } else if (param3 == 3) {
-            fragments.add(FeatureFragment.newInstance("category4", "feature8", 7))
-            fragments.add(FeatureFragment.newInstance("category4", "feature9", 8))
-            fragments.add(FeatureFragment.newInstance("category4", "feature10", 9))
+        // Feature 생성
+        val random = (1 .. 5).random()
+        for (i in 0..random) {
+            fragments.add(FeatureFragment.newInstance(paramCategory, i, paramColorCode?: "#ffffff"))
         }
 
         pagerAdapter = ViewPagerAdapter(activity as AppCompatActivity, fragments)
@@ -109,18 +90,19 @@ class CategoryFragment : Fragment() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
 
-                    Log.v(">>>", "@# onPageSelected - position:${position}")
+                    if (fragments.size > 0) {
 
-                    isFirstPosition = position == 0
-                    isLastPosition = position + 1 == fragments.size
+                        isFirstPosition = position == 0
+                        isLastPosition = position == fragments.size - 1
+                    }
                 }
             })
             viewPager.offscreenPageLimit = fragments.size
 
-            indicator.visibleDotCount = 11
+            /*indicator.visibleDotCount = 11
             indicator.dotColor = Color.parseColor("#99eeeeee")
             indicator.selectedDotColor = Color.parseColor("#ffffff")
-            indicator.attachToPager(viewPager)
+            indicator.attachToPager(viewPager)*/
 
             dragListener = object : DragListener {
 
@@ -142,6 +124,7 @@ class CategoryFragment : Fragment() {
                     }
                 }
             }
+
             viewPager.getChildAt(0).setOnTouchListener { view, event ->
 
                 when (event.action) {

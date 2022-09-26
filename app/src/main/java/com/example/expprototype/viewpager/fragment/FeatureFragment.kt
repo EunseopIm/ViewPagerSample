@@ -2,18 +2,22 @@ package com.example.expprototype.viewpager.fragment
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.expprototype.databinding.FragmentCategoryBinding
 import com.example.expprototype.databinding.FragmentFeatrueBinding
 
 private const val ARG_PARAM1 = "category"
 private const val ARG_PARAM2 = "feature"
-private const val ARG_PARAM3 = "count"
+private const val ARG_PARAM3 = "color"
 
 class FeatureFragment : Fragment() {
+
+    private var paramCategory: Int = 0             // Category number
+    private var paramFeature: Int = 0             // Feature number
+    private var paramColorCode: String? = null      // Color Code
 
     private val binding: FragmentFeatrueBinding by lazy {
         FragmentFeatrueBinding.inflate(layoutInflater)
@@ -21,26 +25,24 @@ class FeatureFragment : Fragment() {
 
     companion object {
 
-        fun newInstance(param1: String, param2: String, param3: Int) =
+        fun newInstance(param1: Int, param2: Int, param3: String) =
             FeatureFragment().apply {
+
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                    putInt(ARG_PARAM3, param3)
+                    putInt(ARG_PARAM1, param1)
+                    putInt(ARG_PARAM2, param2)
+                    putString(ARG_PARAM3, param3)
                 }
             }
     }
 
-    private var param1: String? = null
-    private var param2: String? = null
-    private var param3: Int = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-            param3 = it.getInt(ARG_PARAM3)
+            paramCategory = it.getInt(ARG_PARAM1)
+            paramFeature = it.getInt(ARG_PARAM2)
+            paramColorCode = it.getString(ARG_PARAM3)
         }
     }
 
@@ -56,18 +58,16 @@ class FeatureFragment : Fragment() {
 
     private fun initView() {
 
+        Log.v(">>>", "@# ${paramCategory} / ${paramFeature} / ${paramColorCode}")
+
         // background color
-        binding.clRoot.setBackgroundColor(Color.parseColor("#ff0000"))
-        /*if (param3 % 2 == 1) {
-            binding.clRoot.setBackgroundColor(Color.parseColor("#ff0000"))
-        } else {
-            binding.clRoot.setBackgroundColor(Color.parseColor("#0000ff"))
-        }*/
+        val color = paramColorCode?: "#ffffff"
+        binding.clRoot.setBackgroundColor(Color.parseColor(color))
 
         // category title
-        binding.tvCategory.text = param1?: ""
+        binding.tvCategory.text = "Category $paramCategory"
 
         // feature title
-        binding.tvFeature.text = param2?: ""
+        binding.tvFeature.text = "Feature $paramFeature"
     }
 }
