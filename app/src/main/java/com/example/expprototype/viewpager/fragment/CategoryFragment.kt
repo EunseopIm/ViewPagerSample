@@ -46,11 +46,10 @@ class CategoryFragment : Fragment() {
     var dragListener: DragListener? = null
 
     // flag
-    var isLastPosition = false
-    var isFirstPosition = false
-
-    var isFirstFeature = false
-    var isLastFeature = false
+    var isFirstPosition = false         // 현재 카테고리 내에서 처음
+    var isLastPosition = false          // 현재 카테고리 내에서 마지막
+    var isFarLeft = false               // 전체 Feature 중 처음 (최좌측) - overscroll 버그방지
+    var isFarRight = false              // 전체 Feature 중 마지막 (최우측)
 
     private val binding: FragmentCategoryBinding by lazy {
         FragmentCategoryBinding.inflate(layoutInflater)
@@ -113,11 +112,11 @@ class CategoryFragment : Fragment() {
 
                     try {
 
-                        if (fragments.size > 0) {
-
-                            isFirstPosition = position == 0
-                            isLastPosition = position == fragments.size - 1
-                        }
+                        // flag
+                        isFirstPosition = position == 0
+                        isLastPosition = position == fragments.size - 1
+                        isFarLeft = paramFirstChildPosition + position == 0
+                        isFarRight = paramFirstChildPosition + position == paramTotalCount - 1
 
                         // Indicator 관련 viewpager
                         vpTemp.currentItem = paramFirstChildPosition + position
@@ -129,6 +128,9 @@ class CategoryFragment : Fragment() {
                 }
             })
             vpInner.offscreenPageLimit = fragments.size
+
+            isFarLeft = paramFirstChildPosition == 0
+            isFarRight = paramFirstChildPosition == paramTotalCount - 1
             tvFeatureNumber.text = "${paramFirstChildPosition + 1}"
 
             dragListener = object : DragListener {
@@ -166,14 +168,18 @@ class CategoryFragment : Fragment() {
                     }
 
                     MotionEvent.ACTION_UP ->
+
                         // Right (Hide)
                         if (diffPosX > 0) {
-                            if (isFirstPosition) {
+
+                            if (!isFarLeft && isFirstPosition) {
                                 dragListener?.onRight()
                                 return@setOnTouchListener true
                             }
+
                         } else {
-                            if (isLastPosition) {
+
+                            if (!isFarRight && isLastPosition) {
                                 dragListener?.onLeft()
                                 return@setOnTouchListener true
                             }
