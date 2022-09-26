@@ -17,7 +17,6 @@ class FeatureFragment : Fragment() {
     private var paramCategory: Int = 0              // Category number
     private var paramFeature: Int = 0               // Feature number
     private var paramColorCode: String? = null      // Color Code
-    var currentPosition: Int = 0                    // 전체 Feature 중 현재 position
 
     private val binding: FragmentFeatrueBinding by lazy {
         FragmentFeatrueBinding.inflate(layoutInflater)

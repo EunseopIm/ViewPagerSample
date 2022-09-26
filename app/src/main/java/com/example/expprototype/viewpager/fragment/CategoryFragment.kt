@@ -49,6 +49,9 @@ class CategoryFragment : Fragment() {
     var isLastPosition = false
     var isFirstPosition = false
 
+    var isFirstFeature = false
+    var isLastFeature = false
+
     private val binding: FragmentCategoryBinding by lazy {
         FragmentCategoryBinding.inflate(layoutInflater)
     }
@@ -118,6 +121,7 @@ class CategoryFragment : Fragment() {
 
                         // Indicator 관련 viewpager
                         vpTemp.currentItem = paramFirstChildPosition + position
+                        tvFeatureNumber.text = "${paramFirstChildPosition + position + 1}"
 
                     } catch (e: java.lang.Exception) {
                         e.printStackTrace()
@@ -125,6 +129,7 @@ class CategoryFragment : Fragment() {
                 }
             })
             vpInner.offscreenPageLimit = fragments.size
+            tvFeatureNumber.text = "${paramFirstChildPosition + 1}"
 
             dragListener = object : DragListener {
 
