@@ -3,12 +3,16 @@ package com.example.expprototype.viewpager.fragment
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.expprototype.databinding.FragmentCategoryBinding
 import com.example.expprototype.viewpager.activity.ViewPagerActivity
@@ -44,6 +48,7 @@ class CategoryFragment : Fragment() {
     private var posX = 0f
     private var diffPosX = 0f
     var dragListener: DragListener? = null
+    private var minimumDragX = 50f
 
     // flag
     var isFirstPosition = false         // 현재 카테고리 내에서 처음
@@ -106,6 +111,7 @@ class CategoryFragment : Fragment() {
 
             vpInner.adapter = pagerAdapter
             vpInner.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            (vpInner.getChildAt(0) as RecyclerView).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             vpInner.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -137,20 +143,32 @@ class CategoryFragment : Fragment() {
 
                 override fun onLeft() {
 
-                    activity?.let {
-                        if (it is ViewPagerActivity) {
-                            it.nextPage()
+                    // overscroll 버그로 10ms 딜레이
+                    Handler(Looper.getMainLooper()).postDelayed({
+
+                        activity?.let {
+                            if (it is ViewPagerActivity) {
+                                it.nextPage()
+                            }
                         }
-                    }
+
+                    }, 10)
+
                 }
 
                 override fun onRight() {
 
-                    activity?.let {
-                        if (it is ViewPagerActivity) {
-                            it.prevPage()
+                    // overscroll 버그로 10ms 딜레이
+                    Handler(Looper.getMainLooper()).postDelayed({
+
+                        activity?.let {
+                            if (it is ViewPagerActivity) {
+                                it.prevPage()
+                            }
                         }
-                    }
+
+                    }, 10)
+
                 }
             }
 
@@ -164,26 +182,28 @@ class CategoryFragment : Fragment() {
 
                         posX = event.rawX
                         diffPosX = posX - oldX
-                        //return@setOnTouchListener true
+                        return@setOnTouchListener false
                     }
 
-                    MotionEvent.ACTION_UP ->
+                    MotionEvent.ACTION_UP -> {
 
-                        // Right (Hide)
-                        if (diffPosX > 0) {
+                        Log.v(">>>", "diffPosX : $diffPosX")
+
+                        if (diffPosX > minimumDragX) {
 
                             if (!isFarLeft && isFirstPosition) {
                                 dragListener?.onRight()
-                                return@setOnTouchListener true
+                                return@setOnTouchListener false
                             }
 
-                        } else {
+                        } else if (diffPosX < -minimumDragX) {
 
                             if (!isFarRight && isLastPosition) {
                                 dragListener?.onLeft()
-                                return@setOnTouchListener true
+                                return@setOnTouchListener false
                             }
                         }
+                    }
                 }
 
                 return@setOnTouchListener false
