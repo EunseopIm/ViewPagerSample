@@ -16,14 +16,20 @@ import com.example.expprototype.viewpager.util.DragListener
 import com.example.expprototype.viewpager.util.TempListAdapter
 import com.example.expprototype.viewpager.util.ViewPagerAdapter
 
-private const val ARG_PARAM1 = "category"
-private const val ARG_PARAM2 = "color"
+private const val ARG_PARAM_CATEGORY = "category"
+private const val ARG_PARAM_CHILD_COUNT = "childCount"
+private const val ARG_PARAM_TOTAL_COUNT = "totalCount"
+private const val ARG_PARAM_FIRST_CHILD_POSITION = "firstChildPosition"
+private const val ARG_PARAM_COLOR = "color"
 
 class CategoryFragment : Fragment() {
 
     // Arguments
-    private var paramCategory: Int = 0          // 카테고리
-    private var paramColorCode: String? = null  // 컬러코드
+    private var paramCategory: Int = 0              // 카테고리
+    private var paramChildCount: Int = 0            // 현재 카테고리의 Feature 개수
+    private var paramTotalCount: Int = 0            // 전체 Feature 개수
+    private var paramFirstChildPosition: Int = 0    // 현재 카테고리 첫번째 Feature의 Position (전체 중)
+    private var paramColorCode: String? = null      // 컬러코드
 
     // inner viewpager
     private val fragments: ArrayList<Fragment> = ArrayList()
@@ -49,11 +55,14 @@ class CategoryFragment : Fragment() {
 
     companion object {
 
-        fun newInstance(param1: Int, param2: String) =
+        fun newInstance(categoryNumber: Int, childCount: Int, totalCount: Int, firstChildPosition: Int, colorCode: String) =
             CategoryFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putInt(ARG_PARAM_CATEGORY, categoryNumber)
+                    putInt(ARG_PARAM_CHILD_COUNT, childCount)
+                    putInt(ARG_PARAM_TOTAL_COUNT, totalCount)
+                    putInt(ARG_PARAM_FIRST_CHILD_POSITION, firstChildPosition)
+                    putString(ARG_PARAM_COLOR, colorCode)
                 }
             }
     }
@@ -61,8 +70,11 @@ class CategoryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            paramCategory = it.getInt(ARG_PARAM1)
-            paramColorCode = it.getString(ARG_PARAM2)
+            paramCategory = it.getInt(ARG_PARAM_CATEGORY)
+            paramChildCount = it.getInt(ARG_PARAM_CHILD_COUNT)
+            paramTotalCount = it.getInt(ARG_PARAM_TOTAL_COUNT)
+            paramFirstChildPosition = it.getInt(ARG_PARAM_FIRST_CHILD_POSITION)
+            paramColorCode = it.getString(ARG_PARAM_COLOR)
         }
     }
 
@@ -83,8 +95,7 @@ class CategoryFragment : Fragment() {
         if (activity == null) return
 
         // Feature 생성
-        val random = (1 .. 5).random()
-        for (i in 0..random) {
+        for (i in 0 until paramChildCount) {
             fragments.add(FeatureFragment.newInstance(paramCategory, i, paramColorCode?: "#ffffff"))
         }
 
@@ -97,10 +108,19 @@ class CategoryFragment : Fragment() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
 
-                    if (fragments.size > 0) {
+                    try {
 
-                        isFirstPosition = position == 0
-                        isLastPosition = position == fragments.size - 1
+                        if (fragments.size > 0) {
+
+                            isFirstPosition = position == 0
+                            isLastPosition = position == fragments.size - 1
+                        }
+
+                        // Indicator 관련 viewpager
+                        vpTemp.currentItem = paramFirstChildPosition + position
+
+                    } catch (e: java.lang.Exception) {
+                        e.printStackTrace()
                     }
                 }
             })
@@ -162,22 +182,21 @@ class CategoryFragment : Fragment() {
 
     private fun initTempViewPager() {
 
-        context?.let {
+        activity?.let {
 
             with(binding) {
+
+                for (i in 0 until paramTotalCount) {
+                    mData.add(i)
+                }
 
                 mAdapter = TempListAdapter(it, mData)
                 vpTemp.adapter = mAdapter
                 vpTemp.isUserInputEnabled = false
                 vpTemp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-                vpTemp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                    override fun onPageSelected(position: Int) {
-                        super.onPageSelected(position)
+                vpTemp.currentItem = paramFirstChildPosition
 
-                    }
-                })
-
-                indicator.visibleDotCount = 7
+                indicator.visibleDotCount = 11
                 indicator.dotColor = Color.parseColor("#99eeeeee")
                 indicator.selectedDotColor = Color.parseColor("#ffffff")
                 indicator.attachToPager(vpTemp)

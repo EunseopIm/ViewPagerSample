@@ -1,6 +1,7 @@
 package com.example.expprototype.viewpager.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -14,7 +15,8 @@ import com.example.expprototype.viewpager.util.setCurrentItemExtension
 
 class ViewPagerActivity : AppCompatActivity() {
 
-    private val transformDuration :Long = 2000L // cube - transform duration
+    // Cube Transform
+    private val transformDuration :Long = 300L // cube - transform duration
     private var isTransforming = false
 
     private val fragments: ArrayList<Fragment> = ArrayList()
@@ -34,11 +36,20 @@ class ViewPagerActivity : AppCompatActivity() {
     private fun initViewPager() {
 
         // 뷰페이저 초기화
-        fragments.add(CategoryFragment.newInstance(0, "#000000"))
-        fragments.add(CategoryFragment.newInstance(1, "#ff3333"))
-        fragments.add(CategoryFragment.newInstance(2, "#1fbc00"))
-        fragments.add(CategoryFragment.newInstance(3, "#ffe600"))
-        fragments.add(CategoryFragment.newInstance(4, "#bb86fc"))
+        val childCountA = getRandomChildCount()
+        val childCountB = getRandomChildCount()
+        val childCountC = getRandomChildCount()
+        val childCountD = getRandomChildCount()
+        val childCountE = getRandomChildCount()
+        val totalChildCount = childCountA + childCountB + childCountC + childCountD + childCountE // 총 Feature 개수
+
+        Log.v(">>>", "@# totalChildCount : $totalChildCount")
+
+        fragments.add(CategoryFragment.newInstance(categoryNumber = 0, childCount = childCountA, totalCount = totalChildCount, firstChildPosition = 0, colorCode = "#000000"))
+        fragments.add(CategoryFragment.newInstance(categoryNumber = 1, childCount = childCountB,  totalCount = totalChildCount, firstChildPosition = childCountA, colorCode = "#ff3333"))
+        fragments.add(CategoryFragment.newInstance(categoryNumber = 2, childCount = childCountC, totalCount = totalChildCount, firstChildPosition = childCountA + childCountB, colorCode = "#1fbc00"))
+        fragments.add(CategoryFragment.newInstance(categoryNumber = 3, childCount = childCountD, totalCount = totalChildCount, firstChildPosition = childCountA + childCountB + childCountC, colorCode = "#ffe600"))
+        fragments.add(CategoryFragment.newInstance(categoryNumber = 4, childCount = childCountE, totalCount = totalChildCount, firstChildPosition = childCountA + childCountB + childCountC + childCountD, colorCode = "#bb86fc"))
 
         pagerAdapter = ViewPagerAdapter(this, fragments)
         with(binding) {
@@ -57,6 +68,10 @@ class ViewPagerActivity : AppCompatActivity() {
             vpOuter.isUserInputEnabled = false
             vpOuter.setPageTransformer(CubeOutTransformer())
         }
+    }
+
+    private fun getRandomChildCount(): Int {
+        return (1 .. 5).random()
     }
 
     /**
