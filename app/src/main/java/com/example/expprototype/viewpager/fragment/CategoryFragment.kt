@@ -1,6 +1,7 @@
 package com.example.expprototype.viewpager.fragment
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -12,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.expprototype.databinding.FragmentCategoryBinding
 import com.example.expprototype.viewpager.activity.ViewPagerActivity
 import com.example.expprototype.viewpager.util.DragListener
+import com.example.expprototype.viewpager.util.TempListAdapter
 import com.example.expprototype.viewpager.util.ViewPagerAdapter
 
 private const val ARG_PARAM1 = "category"
@@ -19,20 +21,25 @@ private const val ARG_PARAM2 = "color"
 
 class CategoryFragment : Fragment() {
 
+    // Arguments
     private var paramCategory: Int = 0          // 카테고리
     private var paramColorCode: String? = null  // 컬러코드
 
+    // inner viewpager
     private val fragments: ArrayList<Fragment> = ArrayList()
     private var pagerAdapter: ViewPagerAdapter? = null
 
-    /**
-     * DragListener
-     */
+    // temp viewpager
+    private lateinit var mAdapter: TempListAdapter
+    private var mData: ArrayList<Int> = ArrayList()
+
+    // DragListener
     private var oldX = 0f
     private var posX = 0f
     private var diffPosX = 0f
     var dragListener: DragListener? = null
 
+    // flag
     var isLastPosition = false
     var isFirstPosition = false
 
@@ -65,6 +72,7 @@ class CategoryFragment : Fragment() {
     ): View {
 
         initViewPager()
+        initTempViewPager()
 
         return binding.root
     }
@@ -83,9 +91,9 @@ class CategoryFragment : Fragment() {
         pagerAdapter = ViewPagerAdapter(activity as AppCompatActivity, fragments)
         with(binding) {
 
-            viewPager.adapter = pagerAdapter
-            viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-            viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            vpInner.adapter = pagerAdapter
+            vpInner.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            vpInner.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
 
@@ -96,12 +104,7 @@ class CategoryFragment : Fragment() {
                     }
                 }
             })
-            viewPager.offscreenPageLimit = fragments.size
-
-            /*indicator.visibleDotCount = 11
-            indicator.dotColor = Color.parseColor("#99eeeeee")
-            indicator.selectedDotColor = Color.parseColor("#ffffff")
-            indicator.attachToPager(viewPager)*/
+            vpInner.offscreenPageLimit = fragments.size
 
             dragListener = object : DragListener {
 
@@ -124,7 +127,7 @@ class CategoryFragment : Fragment() {
                 }
             }
 
-            viewPager.getChildAt(0).setOnTouchListener { view, event ->
+            vpInner.getChildAt(0).setOnTouchListener { view, event ->
 
                 when (event.action) {
 
@@ -157,11 +160,36 @@ class CategoryFragment : Fragment() {
         }
     }
 
+    private fun initTempViewPager() {
+
+        context?.let {
+
+            with(binding) {
+
+                mAdapter = TempListAdapter(it, mData)
+                vpTemp.adapter = mAdapter
+                vpTemp.isUserInputEnabled = false
+                vpTemp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+                vpTemp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) {
+                        super.onPageSelected(position)
+
+                    }
+                })
+
+                indicator.visibleDotCount = 7
+                indicator.dotColor = Color.parseColor("#99eeeeee")
+                indicator.selectedDotColor = Color.parseColor("#ffffff")
+                indicator.attachToPager(vpTemp)
+            }
+        }
+    }
+
     /**
      * ChildViewPager - isUserInputEnabled 설정
      */
     fun setChildPageUserInput(isEnabled: Boolean) {
 
-        binding.viewPager.isUserInputEnabled = isEnabled
+        binding.vpInner.isUserInputEnabled = isEnabled
     }
 }

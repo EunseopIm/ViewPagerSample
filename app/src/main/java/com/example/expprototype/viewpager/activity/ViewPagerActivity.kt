@@ -38,13 +38,14 @@ class ViewPagerActivity : AppCompatActivity() {
         fragments.add(CategoryFragment.newInstance(1, "#ff3333"))
         fragments.add(CategoryFragment.newInstance(2, "#1fbc00"))
         fragments.add(CategoryFragment.newInstance(3, "#ffe600"))
+        fragments.add(CategoryFragment.newInstance(4, "#bb86fc"))
 
         pagerAdapter = ViewPagerAdapter(this, fragments)
         with(binding) {
 
-            viewPager.adapter = pagerAdapter
-            viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-            viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            vpOuter.adapter = pagerAdapter
+            vpOuter.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            vpOuter.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
 
@@ -52,9 +53,9 @@ class ViewPagerActivity : AppCompatActivity() {
                     setChildPageUserInput(true)
                 }
             })
-            viewPager.offscreenPageLimit = fragments.size
-            viewPager.isUserInputEnabled = false
-            viewPager.setPageTransformer(CubeOutTransformer())
+            vpOuter.offscreenPageLimit = fragments.size
+            vpOuter.isUserInputEnabled = false
+            vpOuter.setPageTransformer(CubeOutTransformer())
         }
     }
 
@@ -65,20 +66,20 @@ class ViewPagerActivity : AppCompatActivity() {
 
         if (isTransforming) return
 
-        val position = binding.viewPager.currentItem
+        val position = binding.vpOuter.currentItem
         if (position > 0) {
 
             isTransforming = true
             setChildPageUserInput(false)
 
-            binding.viewPager.setCurrentItemExtension(
+            binding.vpOuter.setCurrentItemExtension(
                 position - 1,
                 transformDuration,
                 AccelerateDecelerateInterpolator(),
-                binding.viewPager.width,
-                binding.viewPager.height)
+                binding.vpOuter.width,
+                binding.vpOuter.height)
 
-            //binding.viewPager.setCurrentItem(position - 1, true)
+            //binding.vpOuter.setCurrentItem(position - 1, true)
         }
     }
 
@@ -89,20 +90,20 @@ class ViewPagerActivity : AppCompatActivity() {
 
         if (isTransforming) return
 
-        val position = binding.viewPager.currentItem
+        val position = binding.vpOuter.currentItem
         val size = fragments.size
         if (position < size - 1) {
 
             isTransforming = true
             setChildPageUserInput(false)
 
-            binding.viewPager.setCurrentItemExtension(
+            binding.vpOuter.setCurrentItemExtension(
                 position + 1,
                 transformDuration,
                 AccelerateDecelerateInterpolator(),
-                binding.viewPager.width,
-                binding.viewPager.height)
-            //binding.viewPager.setCurrentItem(position + 1, true)
+                binding.vpOuter.width,
+                binding.vpOuter.height)
+            //binding.vpOuter.setCurrentItem(position + 1, true)
         }
     }
 

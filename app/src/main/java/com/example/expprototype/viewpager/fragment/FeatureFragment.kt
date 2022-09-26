@@ -2,7 +2,6 @@ package com.example.expprototype.viewpager.fragment
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +14,10 @@ private const val ARG_PARAM3 = "color"
 
 class FeatureFragment : Fragment() {
 
-    private var paramCategory: Int = 0             // Category number
-    private var paramFeature: Int = 0             // Feature number
+    private var paramCategory: Int = 0              // Category number
+    private var paramFeature: Int = 0               // Feature number
     private var paramColorCode: String? = null      // Color Code
+    var currentPosition: Int = 0                    // 전체 Feature 중 현재 position
 
     private val binding: FragmentFeatrueBinding by lazy {
         FragmentFeatrueBinding.inflate(layoutInflater)
@@ -58,16 +58,14 @@ class FeatureFragment : Fragment() {
 
     private fun initView() {
 
-        Log.v(">>>", "@# ${paramCategory} / ${paramFeature} / ${paramColorCode}")
-
         // background color
         val color = paramColorCode?: "#ffffff"
         binding.clRoot.setBackgroundColor(Color.parseColor(color))
 
         // category title
-        binding.tvCategory.text = "Category $paramCategory"
+        binding.tvCategory.text = "Category ${paramCategory + 1}"
 
         // feature title
-        binding.tvFeature.text = "Feature $paramFeature"
+        binding.tvFeature.text = "Feature ${paramFeature + 1}"
     }
 }
