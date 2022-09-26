@@ -1,7 +1,6 @@
 package com.example.expprototype.viewpager.fragment
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -156,5 +155,13 @@ class CategoryFragment : Fragment() {
                 return@setOnTouchListener false
             }
         }
+    }
+
+    /**
+     * ChildViewPager - isUserInputEnabled 설정
+     */
+    fun setChildPageUserInput(isEnabled: Boolean) {
+
+        binding.viewPager.isUserInputEnabled = isEnabled
     }
 }

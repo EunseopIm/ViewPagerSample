@@ -14,7 +14,8 @@ import com.example.expprototype.viewpager.util.setCurrentItemExtension
 
 class ViewPagerActivity : AppCompatActivity() {
 
-    private val transformDuration :Long = 300L // cube - transform duration
+    private val transformDuration :Long = 2000L // cube - transform duration
+    private var isTransforming = false
 
     private val fragments: ArrayList<Fragment> = ArrayList()
     private var pagerAdapter: ViewPagerAdapter? = null
@@ -47,6 +48,8 @@ class ViewPagerActivity : AppCompatActivity() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
 
+                    isTransforming = false
+                    setChildPageUserInput(true)
                 }
             })
             viewPager.offscreenPageLimit = fragments.size
@@ -60,8 +63,13 @@ class ViewPagerActivity : AppCompatActivity() {
      */
     fun prevPage() {
 
+        if (isTransforming) return
+
         val position = binding.viewPager.currentItem
         if (position > 0) {
+
+            isTransforming = true
+            setChildPageUserInput(false)
 
             binding.viewPager.setCurrentItemExtension(
                 position - 1,
@@ -79,9 +87,14 @@ class ViewPagerActivity : AppCompatActivity() {
      */
     fun nextPage() {
 
+        if (isTransforming) return
+
         val position = binding.viewPager.currentItem
         val size = fragments.size
         if (position < size - 1) {
+
+            isTransforming = true
+            setChildPageUserInput(false)
 
             binding.viewPager.setCurrentItemExtension(
                 position + 1,
@@ -90,6 +103,19 @@ class ViewPagerActivity : AppCompatActivity() {
                 binding.viewPager.width,
                 binding.viewPager.height)
             //binding.viewPager.setCurrentItem(position + 1, true)
+        }
+    }
+
+    /**
+     * ChildViewPager - isUserInputEnabled 설정
+     */
+    private fun setChildPageUserInput(isEnabled: Boolean) {
+
+        for (fragment in fragments) {
+
+            if (fragment is CategoryFragment) {
+                fragment.setChildPageUserInput(isEnabled)
+            }
         }
     }
 }
