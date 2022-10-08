@@ -204,7 +204,7 @@ class SampleForegroundService : Service() {
     var isInit = true
     private fun getForegroundApp2(context: Context): String? {
 
-        Log.v(">>>", "getForegroundApp2!!!!!")
+        Log.v(">>>", "getForegroundApp2!!!!!Test2222222")
         val usageStatsManager = context.getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager
         val ts = System.currentTimeMillis()
         val queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, 0, ts)
