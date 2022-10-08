@@ -205,6 +205,7 @@ class SampleForegroundService : Service() {
     private fun getForegroundApp2(context: Context): String? {
 
         Log.v(">>>", "getForegroundApp2!!!!!Test2222222 Main Branch")
+        Log.v(">>>", "getForegroundApp2!!!!!Test2222222 Dev Branch")
 
         val usageStatsManager = context.getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager
         val ts = System.currentTimeMillis()
